@@ -1,32 +1,43 @@
 
 #include "TXLib.h"
 
-const int Size = 100;
-
-struct aSharik
-    {
-    int x, y, xv, yv;
-    COLORREF colorIn, colorOut;
-
-    void Draw ();
-    void Physic ();
-    };
+const int Size = 3;
 
 struct aKeyBoardControl
     {
     int left, up, right, down, space;
     };
+class Vector
+    {
+    int x, y, xv, xy;
+    };
 
-void Clamp (int* val, int maxVal, int minVal);
-void KeyBoardControl (aSharik* theBall, const aKeyBoardControl theControl); //
+struct aSharik
+    {
+    Vector v;
+    COLORREF colorIn, colorOut;
 
+    void Draw ();
+    void Physic ();
+    void KeyBoardControl (const aKeyBoardControl theControl);
+    };
+
+class aSnake // изменить
+    {
+    public:
+
+    int len;
+    aSharik shariki [Size];
+
+    void Physic ();
+    void KeyBoardControl (const aKeyBoardControl theControl);
+    void Draw ();
+    };
+void Clamp (int val, int maxVal, int minVal);
 void EatingFood ( aSharik* snake, int* len, aSharik* food); 
 double CountDistance (aSharik ball1, aSharik ball2);
-void DrawSnake (aSharik snake [], int len);
 
-int main(){txCreateWindow (1000, 1000);}
-
-int mmain()
+int main()
     {
 
     txCreateWindow (1000, 1000);
@@ -41,57 +52,60 @@ int mmain()
 
     txBitBlt (0, 0, background);
 
-    aSharik snake[Size] = {{100, 100,   0,  0, RGB (255,   0,   0), RGB (255, 128, 128)}};
-
-    int len = 1;
-
     aSharik food = {rand() % 1000, rand() % 1000,   0,  0, RGB (255, 255, 255), RGB (255, 255, 255)};
+
+    aSnake snake = {1, {{100, 100,   0,  0,  RGB (255,   0,   0), RGB (255, 128, 128)}}}; 
+
+
 
     aKeyBoardControl Player = {'A', 'W', 'D', 'S', 'X'};
 
    
 
-    while (!GetAsyncKeyState (VK_ESCAPE))
+    while (!GetAsyncKeyState (VK_ESCAPE) && snake.len != Size)
         {
 
         txBitBlt (0, 0, background);
-        for (int i = 0; i < len; i++) snake[i].Draw ();
-        food.Draw ();
-
-        for (int i = len-1; i >= 0; i--) snake[i+1] = snake[i];
         
-        DrawSnake (snake, len);
+        snake.shariki[0].KeyBoardControl (Player);
 
-        EatingFood (&snake[0], &len, &food);
+        snake.shariki[0].Physic ();
+        
+        food.Draw ();                
 
-        KeyBoardControl (&snake[0], Player);
+        EatingFood (&snake.shariki[0], &snake.len, &food);
 
-        snake[0].Physic ();
+        snake.Draw();
+
+        cout << snake.len;
 
         txSleep (50);
         }
 
-    txDeleteDC (background);
+    txSelectFont ("Comic Sans MS", 150);
+    txDrawText (100, 100, 900, 900, "You win !!!");
 
+
+    txDeleteDC (background);
     return 0;
     }
 //=============================================================
-void DrawSnake (aSharik snake [], int len)
+void aSnake :: Draw()
     {
-    for (int i = 0; i < len; i++) snake[i].Draw ();
+    for (int i = 0; i < len; i++) shariki[i].Draw ();
 
-    for (int i = len-1; i >= 0; i--) snake[i+1] = snake[i];
+    for (int i = len-1; i >= 0; i--) shariki[i+1] = shariki[i];
     }     
 //=============================================================
 void EatingFood (aSharik* snake, int* len, aSharik* food)  
     {
-    if (CountDistance(*snake, *food) < 50)
+    if (CountDistance(*snake, *food) < 20)
         {
         food->x = rand() % 1000;
         food->y = rand() % 1000;
 
         *len = *len + 1;
-        if (*len > Size - 1) *len = Size - 1;
+        if (*len > Size) *len = Size;
 
         }
     } 
@@ -116,39 +130,39 @@ void Clamp (int* val, int maxVal, int minVal)
     }
 //=============================================================
 
-void KeyBoardControl (aSharik* theBall, const aKeyBoardControl theControl) //!
+void aSharik :: KeyBoardControl (const aKeyBoardControl theControl)
     {
     if (GetAsyncKeyState (theControl.right))
         {
-        theBall->xv += 5;
-        theBall->yv = 0;
+        xv += 5;
+        yv = 0;
         }
 
     if (GetAsyncKeyState (theControl.left))
         {
-        (*theBall).xv -= 5;
-        (*theBall).yv = 0;
+        xv -= 5;
+        yv = 0;
         }
 
     if (GetAsyncKeyState (theControl.down))
         {
-        theBall->yv += 5;
-        theBall->xv = 0;
+        yv += 5;
+        xv = 0;
         }
 
     if (GetAsyncKeyState (theControl.up))
         {                  
-        theBall->yv -= 5;
-        theBall->xv = 0;
+        yv -= 5;
+        xv = 0;
         }
 
     if (GetAsyncKeyState (theControl.space))
         {
-        theBall->xv = theBall->yv = 0;
+        xv = yv = 0;
         }
     
-    Clamp (&theBall->xv, 14, -14);
-    Clamp (&theBall->yv, 14, -14);
+    Clamp (&xv, 14, -14);
+    Clamp (&yv, 14, -14);  
 
     }
 
