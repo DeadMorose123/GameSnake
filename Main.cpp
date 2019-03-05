@@ -1,7 +1,13 @@
 
 #include "TXLib.h"
 
-const int Size = 3;
+const char DimaSuperProgrammer [] = "xX[[[ copyright 2019 DimaSuper ]]]Xx";
+
+int main()
+    {
+
+    }
+/*const int Size = 3;
 
 struct aKeyBoardControl
     {
@@ -34,7 +40,7 @@ class aSnake // изменить
     void Draw ();
     };
 void Clamp (int val, int maxVal, int minVal);
-void EatingFood ( aSharik* snake, int* len, aSharik* food); 
+void EatingFood ( aSharik* snake, int* len, aSharik* food);
 double CountDistance (aSharik ball1, aSharik ball2);
 
 int main()
@@ -54,24 +60,24 @@ int main()
 
     aSharik food = {rand() % 1000, rand() % 1000,   0,  0, RGB (255, 255, 255), RGB (255, 255, 255)};
 
-    aSnake snake = {1, {{100, 100,   0,  0,  RGB (255,   0,   0), RGB (255, 128, 128)}}}; 
+    aSnake snake = {1, {{100, 100,   0,  0,  RGB (255,   0,   0), RGB (255, 128, 128)}}};
 
 
 
     aKeyBoardControl Player = {'A', 'W', 'D', 'S', 'X'};
 
-   
+
 
     while (!GetAsyncKeyState (VK_ESCAPE) && snake.len != Size)
         {
 
         txBitBlt (0, 0, background);
-        
+
         snake.shariki[0].KeyBoardControl (Player);
 
         snake.shariki[0].Physic ();
-        
-        food.Draw ();                
+
+        food.Draw ();
 
         EatingFood (&snake.shariki[0], &snake.len, &food);
 
@@ -81,6 +87,7 @@ int main()
 
         txSleep (50);
         }
+
 
     txSelectFont ("Comic Sans MS", 150);
     txDrawText (100, 100, 900, 900, "You win !!!");
@@ -95,9 +102,9 @@ void aSnake :: Draw()
     for (int i = 0; i < len; i++) shariki[i].Draw ();
 
     for (int i = len-1; i >= 0; i--) shariki[i+1] = shariki[i];
-    }     
+    }
 //=============================================================
-void EatingFood (aSharik* snake, int* len, aSharik* food)  
+void EatingFood (aSharik* snake, int* len, aSharik* food)
     {
     if (CountDistance(*snake, *food) < 20)
         {
@@ -108,13 +115,13 @@ void EatingFood (aSharik* snake, int* len, aSharik* food)
         if (*len > Size) *len = Size;
 
         }
-    } 
+    }
 //=============================================================
 double CountDistance (aSharik ball1, aSharik ball2)
     {
     return sqrt((ball1.x - ball2.x) * (ball1.x - ball2.x) +
                 (ball1.y - ball2.y) * (ball1.y - ball2.y));
-    }                  
+    }
 //=============================================================
 void Clamp (int* val, int maxVal, int minVal)
     {
@@ -151,7 +158,7 @@ void aSharik :: KeyBoardControl (const aKeyBoardControl theControl)
         }
 
     if (GetAsyncKeyState (theControl.up))
-        {                  
+        {
         yv -= 5;
         xv = 0;
         }
@@ -160,9 +167,9 @@ void aSharik :: KeyBoardControl (const aKeyBoardControl theControl)
         {
         xv = yv = 0;
         }
-    
+
     Clamp (&xv, 14, -14);
-    Clamp (&yv, 14, -14);  
+    Clamp (&yv, 14, -14);
 
     }
 
@@ -201,7 +208,7 @@ void aSharik :: Physic ()
 //=============================================================
 
 void aSharik :: Draw ()
-    {
+    {   */
     txSetColor (colorOut);
     txSetFillColor (colorIn);
     txCircle (x, y, 10);
